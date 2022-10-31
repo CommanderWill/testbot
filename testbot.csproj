@@ -12,6 +12,64 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net6.0\testbot.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net6.0\testbot.GlobalUsings.g.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".vs\testbot\DesignTimeBuild\.dtbcache.v2" />
+    <None Include=".vs\testbot\v17\.futdcache.v1" />
+    <None Include="bin\Debug\net6.0copy_test.txt" />
+    <None Include="bin\Debug\net6.0test.txt" />
+    <None Include="bin\Debug\net6.0\accountsTest2.txt" />
+    <None Include="bin\Debug\net6.0\accountsWill.txt" />
+    <None Include="bin\Debug\net6.0\accounts\Test.txt" />
+    <None Include="bin\Debug\net6.0\accounts\Will.txt" />
+    <None Include="bin\Debug\net6.0\accounts\Wumpus.txt" />
+    <None Include="bin\Debug\net6.0\Discord.Net.Commands.dll" />
+    <None Include="bin\Debug\net6.0\Discord.Net.Core.dll" />
+    <None Include="bin\Debug\net6.0\Discord.Net.Interactions.dll" />
+    <None Include="bin\Debug\net6.0\Discord.Net.Rest.dll" />
+    <None Include="bin\Debug\net6.0\Discord.Net.Webhook.dll" />
+    <None Include="bin\Debug\net6.0\Discord.Net.WebSocket.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <None Include="bin\Debug\net6.0\Newtonsoft.Json.dll" />
+    <None Include="bin\Debug\net6.0\server_id.txt" />
+    <None Include="bin\Debug\net6.0\System.Interactive.Async.dll" />
+    <None Include="bin\Debug\net6.0\System.Linq.Async.dll" />
+    <None Include="bin\Debug\net6.0\System.Reactive.dll" />
+    <None Include="bin\Debug\net6.0\templates\account.txt" />
+    <None Include="bin\Debug\net6.0\testbot.deps.json" />
+    <None Include="bin\Debug\net6.0\testbot.dll" />
+    <None Include="bin\Debug\net6.0\testbot.exe" />
+    <None Include="bin\Debug\net6.0\testbot.pdb" />
+    <None Include="bin\Debug\net6.0\testbot.runtimeconfig.json" />
+    <None Include="bin\Debug\net6.0\transaction_logs\Test.txt" />
+    <None Include="bin\Debug\net6.0\transaction_logs\Will.txt" />
+    <None Include="bin\Debug\net6.0\transaction_logs\Wumpus.txt" />
+    <None Include="obj\Debug\net6.0\apphost.exe" />
+    <None Include="obj\Debug\net6.0\refint\testbot.dll" />
+    <None Include="obj\Debug\net6.0\ref\testbot.dll" />
+    <None Include="obj\Debug\net6.0\testbot.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net6.0\testbot.assets.cache" />
+    <None Include="obj\Debug\net6.0\testbot.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net6.0\testbot.csproj.BuildWithSkipAnalyzers" />
+    <None Include="obj\Debug\net6.0\testbot.csproj.CopyComplete" />
+    <None Include="obj\Debug\net6.0\testbot.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\net6.0\testbot.csproj.FileListAbsolute.txt" />
+    <None Include="obj\Debug\net6.0\testbot.dll" />
+    <None Include="obj\Debug\net6.0\testbot.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net6.0\testbot.genruntimeconfig.cache" />
+    <None Include="obj\Debug\net6.0\testbot.pdb" />
+    <None Include="obj\project.assets.json" />
+    <None Include="obj\project.nuget.cache" />
+    <None Include="obj\testbot.csproj.nuget.dgspec.json" />
+    <None Include="obj\testbot.csproj.nuget.g.props" />
+    <None Include="obj\testbot.csproj.nuget.g.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Discord.Net" Version="3.8.1" />
   </ItemGroup>
 
