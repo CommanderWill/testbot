@@ -1,0 +1,10 @@
+[20221023235231] {Account: Will; Transactor: system; Type: deposit; Amount: $1723; Details: A;}
+[20221023235305] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $1000; Details: Test;}
+[20221023235400] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: spend; Amount: $1600; Details: Computer;}
+[20221023235428] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: spend; Amount: $600; Details: Nerf;}
+[20221023235444] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $60; Details: Yaet;}
+[20221024081231] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $42069; Details: Details!!!;}
+[20221029174610] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $150; Details: Perms Test 1;}
+[20221029175219] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: spend; Amount: $100; Details: Perms Testing;}
+[20221029175754] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $50; Details: Perms Testing;}
+[20221029202854] {Account: Will; Transactor: ⁦Lego Commander Will⁩#4194; Type: deposit; Amount: $500; Details: Test;}

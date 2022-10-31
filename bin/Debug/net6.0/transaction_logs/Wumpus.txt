@@ -1,0 +1,1 @@
+[20221029184332] {Account: Wumpus; Transactor: ⁦Wampus⁩#2173; Type: deposit; Amount: $500; Details: Test;}
