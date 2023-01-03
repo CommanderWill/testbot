@@ -22,8 +22,6 @@
     <None Include=".vs\testbot\v17\.futdcache.v1" />
     <None Include="bin\Debug\net6.0copy_test.txt" />
     <None Include="bin\Debug\net6.0test.txt" />
-    <None Include="bin\Debug\net6.0\accountsTest2.txt" />
-    <None Include="bin\Debug\net6.0\accountsWill.txt" />
     <None Include="bin\Debug\net6.0\accounts\Test.txt" />
     <None Include="bin\Debug\net6.0\accounts\Will.txt" />
     <None Include="bin\Debug\net6.0\accounts\Wumpus.txt" />
@@ -39,7 +37,8 @@
     <None Include="bin\Debug\net6.0\System.Interactive.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Linq.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Reactive.dll" />
-    <None Include="bin\Debug\net6.0\templates\account.txt" />
+    <None Include="bin\Debug\net6.0\templates\user_account.txt" />
+    <None Include="bin\Debug\net6.0\templates\org_account.txt" />
     <None Include="bin\Debug\net6.0\testbot.deps.json" />
     <None Include="bin\Debug\net6.0\testbot.dll" />
     <None Include="bin\Debug\net6.0\testbot.exe" />

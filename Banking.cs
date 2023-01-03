@@ -11,7 +11,11 @@ namespace Banking
     internal class Banking
     {
         DateTime dateN;
-        FileManagementCS.FILE_MANAGEMENT fm = new();
+        static FileManagementCS.FILE_MANAGEMENT fm = new();
+
+        protected string templateDir = fm.applicationDirectory + "\\templates";
+        string accountDir = fm.applicationDirectory + "\\accounts";
+        string orgAccountTemplate = "org_account.txt";
 
         public string dateNumber()
         {
@@ -21,11 +25,9 @@ namespace Banking
         }
         public void createAccount(string accountName)
         {
-            string templateDir = fm.applicationDirectory + "\\templates";
-            string accountDir = fm.applicationDirectory + "\\accounts";
             string accountFile = accountName + ".txt";
 
-            fm.fileCopy(templateDir, "account.txt", accountDir, accountFile);
+            fm.fileCopy(templateDir, orgAccountTemplate, accountDir, accountFile);
         }
         public void accountTransaction(string accountName, string type, int amount, string details, string transactor)
         {
@@ -35,18 +37,18 @@ namespace Banking
             Console.WriteLine(accountTransactionLog);
 
             string accountFile = accountName + ".txt";
-            if (checkAccountExistence(accountName) == false){
+            if (checkAccountExistence(accountName) == false) {
                 createAccount(accountName);
             }
             string logMessage = "[" + dateNumber() + "] {Account: " + accountName + "; Transactor: " + transactor + "; Type: " + type + "; Amount: $" + amount + "; Details: " + details + ";}";
 
             int balance = Convert.ToInt32(getBalance(accountName));
-            if(type == "spend")
+            if (type == "spend")
             {
                 amount = amount * -1;
             }
             int newBalance = balance + amount;
-            fm.fileEditExistingLine(accountDir, accountFile, 2, Convert.ToString(newBalance));            
+            fm.fileEditExistingLine(accountDir, accountFile, 2, Convert.ToString(newBalance));
 
             if (File.Exists(accountTransactionLog))
             {
@@ -55,13 +57,13 @@ namespace Banking
             else
             {
                 fm.fileCreate(accountTransactionLogsFolder, accountFile, logMessage);
-            }         
+            }
         }
         public string getBalance(string accountName)
         {
             string accountDir = fm.applicationDirectory + "\\accounts\\";
             string accountFile = accountName + ".txt";
-            string balance =fm.fileReadSpecific(accountDir, accountFile, 2, 2);
+            string balance = fm.fileReadSpecific(accountDir, accountFile, 2, 2);
             return balance;
         }
         public string getRecentTransactions(string accountName) // Gets 5 recent transactions (TBI, currently gets all)
@@ -80,4 +82,16 @@ namespace Banking
             return exists;
         }
     }
+
+    class UserAccounts:Banking{
+        static FileManagementCS.FILE_MANAGEMENT fm = new();
+        public void createAccount(string userID, string guildID)
+        {
+            string accountDir = fm.applicationDirectory + "\\guilds\\" + guildID;
+            string accountFile = userID + ".txt";
+
+            fm.fileCopy(templateDir, "user_account.txt", accountDir, accountFile);
+        }
+    }
+
 }
