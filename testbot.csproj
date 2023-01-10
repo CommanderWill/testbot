@@ -31,7 +31,6 @@
     <None Include="bin\Debug\net6.0\Discord.Net.WebSocket.dll" />
     <None Include="bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
     <None Include="bin\Debug\net6.0\Newtonsoft.Json.dll" />
-    <None Include="bin\Debug\net6.0\server_id.txt" />
     <None Include="bin\Debug\net6.0\System.Interactive.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Linq.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Reactive.dll" />
