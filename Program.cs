@@ -78,10 +78,42 @@ namespace MyNameSpace
                     await HandleListRoleCommand(command);
                     await COR_Roles(command);
                     break;
+                case "transferfunds":
+                    await handleFundsTransfer(command);
+                    break;
                 case "account":
                     await handleAccount(command);
                     break;
             }
+        }
+
+        private async Task handleFundsTransfer(SocketSlashCommand command)
+        {
+            Banking.Banking banking = new();
+            //set transaction variables
+            string fromAccount = Convert.ToString(command.Data.Options.ElementAt(0).Value);
+            string toAccount = Convert.ToString(command.Data.Options.ElementAt(1).Value);
+            int transferAmmount = Convert.ToInt32(command.Data.Options.ElementAt(2).Value);
+            string sTransferAmount = Convert.ToString(transferAmmount);
+            string transferDetails = Convert.ToString(command.Data.Options.ElementAt(3).Value);
+            string guildID = Convert.ToString(command.GuildId);
+
+            //Run Funds Transfer
+            banking.transferFunds(fromAccount, toAccount, transferAmmount, transferDetails, guildID);
+            string testResponse =
+                    "**------------------------------------------------------------------**" + System.Environment.NewLine +
+                    "**Receipt**:" + System.Environment.NewLine +
+                    "**------------------------------------------------------------------**" + System.Environment.NewLine +
+                    "**From:** " + fromAccount + System.Environment.NewLine +
+                    "**To:** " + toAccount + System.Environment.NewLine +
+                    "**Amount:** $" + sTransferAmount + System.Environment.NewLine +
+                    "**Details** " + transferDetails + System.Environment.NewLine +
+                     "**------------------------------------------------------------------**" + System.Environment.NewLine +
+                     fromAccount + "**New Balance** " + banking.getBalance(fromAccount, guildID) + System.Environment.NewLine +
+                     toAccount + "**New Balance** " + banking.getBalance(toAccount, guildID) + System.Environment.NewLine +
+                    "**------------------------------------------------------------------**" + System.Environment.NewLine;
+            Console.WriteLine(testResponse);
+            await command.RespondAsync(testResponse);
         }
 
         private async Task handleAccount(SocketSlashCommand command)
@@ -96,10 +128,10 @@ namespace MyNameSpace
                 int transactionType = Convert.ToInt32(command.Data.Options.First().Options.ElementAt(1).Value);
                 int transactionAmount = Convert.ToInt32(command.Data.Options.First().Options.ElementAt(2).Value);
                 string transactionDetails = Convert.ToString(command.Data.Options.First().Options.ElementAt(3).Value);
+                string guildID = Convert.ToString(command.GuildId);
                 string transactionTransactor = Convert.ToString(command.User);
                 string sTransactionType = "";
-                string sTransactionAmount = Convert.ToString(transactionAmount);
-                
+                string sTransactionAmount = Convert.ToString(transactionAmount);                
                 switch (transactionType)
                 {
                     case 1:
@@ -108,15 +140,14 @@ namespace MyNameSpace
                     case 2:
                         sTransactionType = "spend";
                         break;
-                }
-                
+                }              
                 
 
-                if (!banking.checkAccountExistence(transactionAccountName))
+                if (!banking.checkAccountExistence(transactionAccountName, guildID))
                 {
-                    banking.createAccount(transactionAccountName);
+                    banking.createAccount(transactionAccountName, guildID);
                 }
-                banking.accountTransaction(transactionAccountName, sTransactionType, transactionAmount, transactionDetails, transactionTransactor);
+                banking.accountTransaction(transactionAccountName, sTransactionType, transactionAmount, transactionDetails, transactionTransactor, guildID, true);
                 string testResponse =
                     "**------------------------------------------------------------------**" + System.Environment.NewLine +
                     "**Receipt**:" + System.Environment.NewLine +
@@ -126,26 +157,27 @@ namespace MyNameSpace
                     "**Amount:** $" + sTransactionAmount + System.Environment.NewLine +
                     "**Details** " + transactionDetails + System.Environment.NewLine +
                      "**------------------------------------------------------------------**" + System.Environment.NewLine +
-                      "**New Balance** " + banking.getBalance(transactionAccountName) + System.Environment.NewLine +
+                      "**New Balance** " + banking.getBalance(transactionAccountName, guildID) + System.Environment.NewLine +
                     "**------------------------------------------------------------------**" + System.Environment.NewLine;
                 Console.WriteLine(testResponse);
                 await command.RespondAsync(testResponse);
             } else
-            { // Get Set
+            { // Add in guildID stuff
                 if(commandSet == "check")
                 {
                     var commandSpecific = command.Data.Options.First().Options.First().Name;
                     Console.WriteLine(commandSpecific);
                     var secondCommandSet = command.Data.Options.First().Options.First();
                     var secondCommandSetName = command.Data.Options.First().Options.First().Name;
+                    string guildID = Convert.ToString(command.GuildId);
                     Console.WriteLine(secondCommandSetName);
                     if (commandSpecific == "balance")
                     {
-                        await command.RespondAsync("**Account: **" + Convert.ToString(secondCommandSet.Options.First().Value) + "\n**Balance:** $" + banking.getBalance(Convert.ToString(command.Data.Options.First().Options.First().Options.First().Value)) );
+                        await command.RespondAsync("**Account: **" + Convert.ToString(secondCommandSet.Options.First().Value) + "\n**Balance:** $" + banking.getBalance(Convert.ToString(command.Data.Options.First().Options.First().Options.First().Value), guildID) );
                     } else if (commandSpecific == "transaction-logs")
                     {
                         Console.WriteLine(secondCommandSet.Options.First().Value);
-                        await command.RespondAsync(banking.getRecentTransactions(Convert.ToString(secondCommandSet.Options.First().Value)));
+                        await command.RespondAsync(banking.getRecentTransactions(Convert.ToString(secondCommandSet.Options.First().Value), guildID));
                     }
                 }
             }  
@@ -185,14 +217,24 @@ namespace MyNameSpace
         private async Task Client_Ready()
         {
             FileManagementCS.FILE_MANAGEMENT fm = new();
-            ulong guildID = 870858496160174080;
+            
             //Testing guild ID: 870858496160174080
             //TPRP ID: 778444685952680027
             //AMD ID: 1011055042591207465
-            var testing = new SlashCommandBuilder()// Next, lets create our slash command builder. This is like the embed builder but for slash commands.
-                .WithName("testing") // Note: Names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
+            var testing = new SlashCommandBuilder()
+                .WithName("testing") // Names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
                 .WithDescription("Yaet") // Descriptions can have a max length of 100.
                 .AddOption("user", ApplicationCommandOptionType.User, "Lists User Roles", isRequired: true);
+
+            var accountFundsTransfer = new SlashCommandBuilder()
+                .WithName("transferfunds")
+                .WithDescription("transfer funds between two accounts")
+                .WithDefaultMemberPermissions(GuildPermission.Administrator)
+                .AddOption("fromaccount", ApplicationCommandOptionType.String, "Account the money is from", isRequired: true)
+                .AddOption("toaccount", ApplicationCommandOptionType.String, "Account the money is going to", isRequired: true)
+                .AddOption("amount", ApplicationCommandOptionType.Integer, "Amount to Transfer", isRequired: true)
+                .AddOption("details", ApplicationCommandOptionType.String, "Details of Funds Transfer", isRequired: true);
+                
 
             // Detail Command
             var accountTransaction = new SlashCommandBuilder()
@@ -204,7 +246,7 @@ namespace MyNameSpace
                         .WithDescription("Perform an Account Transaction")
                         .WithType(ApplicationCommandOptionType.SubCommand)
                             .AddOption("account_name", ApplicationCommandOptionType.String, "Which Account to Check", isRequired: true)
-                           .AddOption(new SlashCommandOptionBuilder()
+                            .AddOption(new SlashCommandOptionBuilder()
                                 .WithName("type")
                                 .WithDescription("What Transaction Type")
                                 .WithRequired(true)
@@ -212,8 +254,9 @@ namespace MyNameSpace
                                 .AddChoice("Spend", 2)
                                 .WithType(ApplicationCommandOptionType.Integer)
                             )
-                           .AddOption("amount", ApplicationCommandOptionType.Integer, "Amount to Deposit", isRequired: true)
-                           .AddOption("details", ApplicationCommandOptionType.String, "Details of Income", isRequired: true)
+                            .AddOption("amount", ApplicationCommandOptionType.Integer, "Amount to Deposit", isRequired: true)
+                            .AddOption("details", ApplicationCommandOptionType.String, "Details of Transaction", isRequired: true)
+
                 )
                 .AddOption(new SlashCommandOptionBuilder()
                         .WithName("check")
@@ -235,6 +278,7 @@ namespace MyNameSpace
 
 
             //Init Commands within Servers
+            ulong guildID;
             int guildNum = 0;
             int guildNumTot = fm.fileLinesCheck(fm.applicationDirectory, "server_id.txt");
             do
@@ -247,6 +291,7 @@ namespace MyNameSpace
                 {
                     // Generate Commands
                     await _client.Rest.CreateGuildCommand(testing.Build(), guildID);
+                    await _client.Rest.CreateGuildCommand(accountFundsTransfer.Build(), guildID);
                     await _client.Rest.CreateGuildCommand(accountTransaction.Build(), guildID);
                 }
                 catch (HttpException exception)

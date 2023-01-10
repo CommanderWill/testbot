@@ -1,0 +1,9 @@
+﻿Versions:
+
+V1 - Org Account Support
+V1.1 - Full Account Support + Transfer Funds + Better File System
+
+TODO:
+
+- All current objectives complete
+

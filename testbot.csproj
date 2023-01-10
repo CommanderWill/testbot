@@ -12,9 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
     <Compile Include="obj\Debug\net6.0\testbot.AssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net6.0\testbot.GlobalUsings.g.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,8 +35,7 @@
     <None Include="bin\Debug\net6.0\System.Interactive.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Linq.Async.dll" />
     <None Include="bin\Debug\net6.0\System.Reactive.dll" />
-    <None Include="bin\Debug\net6.0\templates\user_account.txt" />
-    <None Include="bin\Debug\net6.0\templates\org_account.txt" />
+    <None Include="bin\Debug\net6.0\templates\account.txt" />
     <None Include="bin\Debug\net6.0\testbot.deps.json" />
     <None Include="bin\Debug\net6.0\testbot.dll" />
     <None Include="bin\Debug\net6.0\testbot.exe" />
