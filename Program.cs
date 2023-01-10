@@ -217,10 +217,6 @@ namespace MyNameSpace
         private async Task Client_Ready()
         {
             FileManagementCS.FILE_MANAGEMENT fm = new();
-            
-            //Testing guild ID: 870858496160174080
-            //TPRP ID: 778444685952680027
-            //AMD ID: 1011055042591207465
             var testing = new SlashCommandBuilder()
                 .WithName("testing") // Names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
                 .WithDescription("Yaet") // Descriptions can have a max length of 100.
