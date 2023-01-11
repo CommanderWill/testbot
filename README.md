@@ -16,4 +16,4 @@ Feel free to use any code here, in general its not great, some of the best stuff
 
 If you use this project for any public project, it would be preferred if you credit this project.
 
-I have removed the serverID file from this project, to add your own, make a file in the main directory called "serverid.txt" and every second line put the server IDs, I have this set so every first line I can put the names of each server
+I have removed the serverID file from this project, to add your own, make a file in the main directory called "server_id.txt" and every second line put the server IDs, I have this set so every first line I can put the names of each server
