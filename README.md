@@ -15,3 +15,5 @@ I used the discord.net documentation and stack overflow to learn how to do a ran
 Feel free to use any code here, in general its not great, some of the best stuff is what I learned and took almost directly from Stack Overflow & the discord.net documentation.
 
 If you use this project for any public project, it would be preferred if you credit this project.
+
+I have removed the serverID file from this project, to add your own, make a file in the main directory called "serverid.txt" and every second line put the server IDs, I have this set so every first line I can put the names of each server
