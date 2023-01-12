@@ -109,8 +109,8 @@ namespace MyNameSpace
                     "**Amount:** $" + sTransferAmount + System.Environment.NewLine +
                     "**Details** " + transferDetails + System.Environment.NewLine +
                      "**------------------------------------------------------------------**" + System.Environment.NewLine +
-                     fromAccount + "**New Balance** " + banking.getBalance(fromAccount, guildID) + System.Environment.NewLine +
-                     toAccount + "**New Balance** " + banking.getBalance(toAccount, guildID) + System.Environment.NewLine +
+                     fromAccount + "**New Balance $** " + banking.getBalance(fromAccount, guildID) + System.Environment.NewLine +
+                     toAccount + "**New Balance $** " + banking.getBalance(toAccount, guildID) + System.Environment.NewLine +
                     "**------------------------------------------------------------------**" + System.Environment.NewLine;
             Console.WriteLine(testResponse);
             await command.RespondAsync(testResponse);
