@@ -71,18 +71,29 @@ namespace MyNameSpace
         {
             switch (command.Data.Name)
             {
+                // Depricated
                 case "first-command":
                     await command.RespondAsync($"Depricated");
                     break;
+                case "transferfunds":
+                    await command.RespondAsync($"Depricated");
+                    break;
+                case "transferfunds-role":
+                    await command.RespondAsync($"Depricated");
+                    break;
+
+                // Current
                 case "testing":
                     await HandleListRoleCommand(command);
-                    await COR_Roles(command);
-                    break;
-                case "transferfunds":
-                    await handleFundsTransfer(command);
-                    break;
+                    break;                
                 case "account":
                     await handleAccount(command);
+                    break;                
+                case "bank-admin-user":
+                    await handleFundsTransfer(command);
+                    break;
+                case "bank-admin-role":
+                    await handleFundsTransfer_Role(command);
                     break;
             }
         }
@@ -93,14 +104,14 @@ namespace MyNameSpace
             //set transaction variables
             string fromAccount = Convert.ToString(command.Data.Options.ElementAt(0).Value);
             string toAccount = Convert.ToString(command.Data.Options.ElementAt(1).Value);
-            int transferAmmount = Convert.ToInt32(command.Data.Options.ElementAt(2).Value);
-            string sTransferAmount = Convert.ToString(transferAmmount);
+            int transferAmount = Convert.ToInt32(command.Data.Options.ElementAt(2).Value);
+            string sTransferAmount = Convert.ToString(transferAmount);
             string transferDetails = Convert.ToString(command.Data.Options.ElementAt(3).Value);
             string guildID = Convert.ToString(command.GuildId);
 
             //Run Funds Transfer
-            banking.transferFunds(fromAccount, toAccount, transferAmmount, transferDetails, guildID);
-            string testResponse =
+            banking.transferFunds(fromAccount, toAccount, transferAmount, transferDetails, guildID);
+            string transferMessage =
                     "**------------------------------------------------------------------**" + System.Environment.NewLine +
                     "**Receipt**:" + System.Environment.NewLine +
                     "**------------------------------------------------------------------**" + System.Environment.NewLine +
@@ -112,8 +123,8 @@ namespace MyNameSpace
                      fromAccount + "**New Balance $** " + banking.getBalance(fromAccount, guildID) + System.Environment.NewLine +
                      toAccount + "**New Balance $** " + banking.getBalance(toAccount, guildID) + System.Environment.NewLine +
                     "**------------------------------------------------------------------**" + System.Environment.NewLine;
-            Console.WriteLine(testResponse);
-            await command.RespondAsync(testResponse);
+            Console.WriteLine(transferMessage);
+            await command.RespondAsync(transferMessage);
         }
 
         private async Task handleAccount(SocketSlashCommand command)
@@ -183,18 +194,6 @@ namespace MyNameSpace
             }  
         }
 
-        private async Task COR_Roles(SocketSlashCommand command) //Console Output Roles
-        {
-            // We need to extract the user parameter from the command. since we only have one option and it's required, we can just use the first option.
-            var guildUser = (SocketGuildUser)command.Data.Options.First().Value;
-
-            // We remove the everyone role and select the mention of each role.
-            var roleList = string.Join(",\n", guildUser.Roles.Where(x => !x.IsEveryone).Select(x => x.Mention));
-
-            string msg = "User: " + guildUser.ToString() + System.Environment.NewLine + "Roles: " + roleList;
-            Console.WriteLine(msg.ToString());
-        }
-
         private async Task HandleListRoleCommand(SocketSlashCommand command)
         {
             // We need to extract the user parameter from the command. since we only have one option and it's required, we can just use the first option.
@@ -212,27 +211,113 @@ namespace MyNameSpace
 
             // Now, Let's respond with the embed.
             await command.RespondAsync(embed: embedBuiler.Build());
+
+            // Log this action in the console
+            string msg = "User: " + guildUser.ToString() + System.Environment.NewLine + "Roles: " + roleList;
+            Console.WriteLine(msg.ToString());
         }
 
+        private async Task handleFundsTransfer_Role(SocketSlashCommand command)
+        {
+            //Setup Banking Class for Banking Operations
+            Banking.Banking banking = new();
+
+            ///----------GET ALL VARIABLES READY------------
+            // Get Guild ID
+            string guildID = Convert.ToString(command.GuildId);
+            //Get the account the funds are being transfered from
+            string fromAccount = Convert.ToString(command.Data.Options.ElementAt(0).Value);
+
+            //Get and Convert List of Members Who Have The Role Then Prepare Other Member Variables
+            SocketRole selectedRole = (SocketRole)command.Data.Options.ElementAt(1).Value; 
+            IEnumerable<SocketGuildUser> roleMembers = selectedRole.Members;
+            SocketGuildUser[] roleMembersArray = roleMembers.ToArray();
+            string roleMember = "";
+            string[] sRoleMembersArray = new string[roleMembersArray.Length];
+            string roleMembersList = "";
+
+            //Get Transfer Amount
+            int transferAmount = Convert.ToInt32(command.Data.Options.ElementAt(2).Value);
+            string sTransferAmount = Convert.ToString(transferAmount);
+
+            //Get Distribution Type
+            int distributionType = Convert.ToInt32(command.Data.Options.ElementAt(3).Value);
+
+            //Get the Transfer Details
+            string transferDetails = Convert.ToString(command.Data.Options.ElementAt(4).Value);
+
+            if(distributionType == 1)
+            { //even split distribution
+                int splitTransferAmount = (transferAmount /(roleMembersArray.Length));
+                for (int i = 0; i < roleMembersArray.Length; i++)
+                {
+                    roleMember = roleMembersArray[i].ToString();
+                    banking.transferFunds(fromAccount, roleMember, splitTransferAmount, transferDetails, guildID);
+                    sRoleMembersArray[i] = roleMember;
+                    roleMembersList = roleMembersList + ", " + roleMember;
+                };
+            }
+            else
+            { //per-each distribution
+                for (int i = 0; i < roleMembersArray.Length; i++)
+                {
+                    roleMember = roleMembersArray[i].ToString();
+                    banking.transferFunds(fromAccount, roleMember, transferAmount, transferDetails, guildID);
+                    sRoleMembersArray[i] = roleMember;
+                    roleMembersList = roleMembersList + ", " + roleMember;
+                };
+            }
+            string transferMessage =
+                   "**------------------------------------------------------------------**" + System.Environment.NewLine +
+                   "**Receipt**:" + System.Environment.NewLine +
+                   "**------------------------------------------------------------------**" + System.Environment.NewLine +
+                   "**From:** " + fromAccount + System.Environment.NewLine +
+                   "**To:** " + roleMembersList + System.Environment.NewLine +
+                   "**Amount:** $" + sTransferAmount + System.Environment.NewLine +
+                   "**Details** " + transferDetails + System.Environment.NewLine +
+                    "**------------------------------------------------------------------**" + System.Environment.NewLine;
+            Console.WriteLine(transferMessage);
+            await command.RespondAsync(transferMessage);
+        }
         private async Task Client_Ready()
         {
             FileManagementCS.FILE_MANAGEMENT fm = new();
+
+            //Test command, was used to learn some stuff about commands but is not meant to be a primary function of the bot
             var testing = new SlashCommandBuilder()
                 .WithName("testing") // Names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
                 .WithDescription("Yaet") // Descriptions can have a max length of 100.
                 .AddOption("user", ApplicationCommandOptionType.User, "Lists User Roles", isRequired: true);
 
+            //Transfer funds from one account to another account
             var accountFundsTransfer = new SlashCommandBuilder()
-                .WithName("transferfunds")
+                .WithName("bank-admin-user")
                 .WithDescription("transfer funds between two accounts")
                 .WithDefaultMemberPermissions(GuildPermission.Administrator)
                 .AddOption("fromaccount", ApplicationCommandOptionType.String, "Account the money is from", isRequired: true)
                 .AddOption("toaccount", ApplicationCommandOptionType.String, "Account the money is going to", isRequired: true)
                 .AddOption("amount", ApplicationCommandOptionType.Integer, "Amount to Transfer", isRequired: true)
                 .AddOption("details", ApplicationCommandOptionType.String, "Details of Funds Transfer", isRequired: true);
-                
 
-            // Detail Command
+            //Transfer funds from one account to everyone with a role
+            var roleFundsTransfer = new SlashCommandBuilder()
+                .WithName("bank-admin-role")
+                .WithDescription("transfer funds from one account to all accounts with the specified role")
+                .WithDefaultMemberPermissions(GuildPermission.Administrator)
+                .AddOption("fromaccount", ApplicationCommandOptionType.String, "Account the money is from", isRequired: true)
+                .AddOption("torole", ApplicationCommandOptionType.Role, "Role the money is going to", isRequired: true)
+                .AddOption("amount", ApplicationCommandOptionType.Integer, "Amount to Transfer", isRequired: true)
+                .AddOption(new SlashCommandOptionBuilder()
+                                .WithName("distribution_type")
+                                .WithDescription("What method to distribute?")
+                                .WithRequired(true)
+                                .AddChoice("even_split", 1)
+                                .AddChoice("per_each", 2)
+                                .WithType(ApplicationCommandOptionType.Integer)
+                            )
+                .AddOption("details", ApplicationCommandOptionType.String, "Details of Funds Transfer", isRequired: true);
+
+            //Basic Account Transatction (Adds/Removes w/o transfer)
             var accountTransaction = new SlashCommandBuilder()
                 .WithName("account")
                 .WithDescription("Perform Account Operations")
@@ -288,6 +373,7 @@ namespace MyNameSpace
                     // Generate Commands
                     await _client.Rest.CreateGuildCommand(testing.Build(), guildID);
                     await _client.Rest.CreateGuildCommand(accountFundsTransfer.Build(), guildID);
+                    await _client.Rest.CreateGuildCommand(roleFundsTransfer.Build(), guildID);
                     await _client.Rest.CreateGuildCommand(accountTransaction.Build(), guildID);
                 }
                 catch (HttpException exception)

@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\Debug\net6.0\accounts\**" />
+    <EmbeddedResource Remove="bin\Debug\net6.0\accounts\**" />
+    <None Remove="bin\Debug\net6.0\accounts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="account.template" />
   </ItemGroup>
 
@@ -16,13 +22,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\net6.0\guilds\870858496160174080\accounts\1026966515037253734.txt" />
+    <Content Include="bin\Debug\net6.0\guilds\870858496160174080\accounts\453655470435991562.txt" />
+    <Content Include="bin\Debug\net6.0\guilds\870858496160174080\accounts\717485773456146483.txt" />
+    <Content Include="bin\Debug\net6.0\guilds\870858496160174080\transaction_logs\453655470435991562.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include=".vs\testbot\DesignTimeBuild\.dtbcache.v2" />
     <None Include=".vs\testbot\v17\.futdcache.v1" />
-    <None Include="bin\Debug\net6.0copy_test.txt" />
-    <None Include="bin\Debug\net6.0test.txt" />
-    <None Include="bin\Debug\net6.0\accounts\Test.txt" />
-    <None Include="bin\Debug\net6.0\accounts\Will.txt" />
-    <None Include="bin\Debug\net6.0\accounts\Wumpus.txt" />
     <None Include="bin\Debug\net6.0\Discord.Net.Commands.dll" />
     <None Include="bin\Debug\net6.0\Discord.Net.Core.dll" />
     <None Include="bin\Debug\net6.0\Discord.Net.Interactions.dll" />
